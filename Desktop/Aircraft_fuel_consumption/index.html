@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Consumption Predictor</title>
+</head>
+<body>
+    <h1>Aircraft Fuel Consumption Predictor</h1>
+    <label>Flight Distance (in km):</label>
+    <input type="number" id="Flight_Distance" required><br>
+
+    <label>Number of Passengers:</label>
+    <input type="number" id="Number_of_Passengers" required><br>
+
+    <label>Flight Duration:</label>
+    <input type="number" id="Flight_Duration" required><br>
+
+    <label>Aircraft Type:</label>
+    <select id="Aircraft_Type">
+        <option value="Type1">Type1</option>
+        <option value="Type2">Type2</option>
+        <option value="Type3">Type3</option>
+    </select><br>
+
+    <button onclick="predictFuelConsumption()">Predict</button>
+    <p id="result"></p>
+
+    <script>
+        async function predictFuelConsumption() {
+            const data = {
+                Flight_Distance: parseFloat(document.getElementById('Flight_Distance').value),
+                Number_of_Passengers: parseInt(document.getElementById('Number_of_Passengers').value),
+                Flight_Duration: parseFloat(document.getElementById('Flight_Duration').value),
+                Aircraft_Type: document.getElementById('Aircraft_Type').value
+            };
+
+            const response = await fetch("http://localhost:8000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById("result").textContent = `Predicted Fuel Consumption: ${result.Fuel_Consumption}`;
+        }
+    </script>
+</body>
+</html>
